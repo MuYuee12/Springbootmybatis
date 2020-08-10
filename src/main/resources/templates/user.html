@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UserInfo Page</title>
+</head>
+<body>
+    登录成功
+    <div id="content"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="js/common.js"></script>
+<script>
+    $(function () {
+        var userInfo = commonUtil.getUrlParam("userInfo");
+        var json = JSON.parse(userInfo)
+        console.log(json)
+        $("#content").html('<p>账号：'+json.userName+'<br/>密码：'+json.password+'<p/>');
+    });
+</script>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+    用户名:<input type="text" id="userName" name="userName"  placeholder="请输入用户名"/><br>
+    密码: <input type="password" id="password" name="password" placeholder="请输入密码" style="margin-top: 10px"/><br>
+    <input type="button" onclick="login()" value="登录" style="margin-top: 10px"/>
+    <input type="button" onclick="register()" value="注册"><br>
+    uid:<input type="text" id="uid" name="uid" placeholder="请输入uid，以便于更新和删除" style="margin-top: 10px"/><br>
+    <input type="button" onclick="update()" value="更新" style="margin-top: 10px">
+    <input type="button" onclick="deleteUser()" value="删除">
+    <div id="content"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script>
+    function deleteUser(){
+        let uid = $('#uid').val()
+        let param= {}
+        param.uid = uid
+        $.ajax({
+            url:'/delete',
+            type:'post',
+            data:JSON.stringify(param),
+            dataType:'json',
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code == '203'){
+                    var json = JSON.parse(res.data);
+                    console.log(json);
+                    $("#content").html('<p>'+res.message+'<p/>');
+                    // window.location.href = "/toRegister?userInfo="+encodeURI(res.data);
+                }else{
+                    console.log("删除失败");
+                }
+            },
+            error:function (data) {
+                console.log("fail")
+            }
+        })
+    }
+    function update(){
+        let userName = $('#userName').val()
+        let password = $('#password').val()
+        let uid = $('#uid').val()
+        let param= {}
+        param.userName = userName
+        param.password = password
+        param.uid = uid
+        $.ajax({
+            url:'/update',
+            type:'post',
+            data:JSON.stringify(param),
+            dataType:'json',
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code == '202'){
+                    var json = JSON.parse(res.data);
+                    console.log(json);
+                    $("#content").html('<p>账号：'+json.userName+'<br/>密码：'+json.password+'<p/>');
+                    // window.location.href = "/toRegister?userInfo="+encodeURI(res.data);
+                }else{
+                    console.log("更新失败");
+                }
+            },
+            error:function (data) {
+                console.log("fail")
+            }
+        })
+    }
+    function register() {
+        let userName = $('#userName').val()
+        let password = $('#password').val()
+        let param= {}
+        param.userName = userName
+        param.password = password
+        $.ajax({
+            url:'/register',
+            type:'post',
+            data:JSON.stringify(param),
+            dataType:'json',
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code == '201'){
+                    var json = JSON.parse(res.data);
+                    console.log(json);
+                    window.location.href = "/toUser?userInfo="+encodeURI(res.data);
+                }else{
+                    console.log("注册失败");
+                }
+            },
+            error:function (data) {
+                console.log("fail")
+            }
+        })
+    }
+    function login() {
+        let userName = $('#userName').val()
+        let password = $('#password').val()
+        let param= {}
+        param.userName = userName
+        param.password = password
+        //JSON.stringfy(),JSON.parse()
+        $.ajax({
+            url:'/login',
+            type:'post',
+            data:JSON.stringify(param),
+            dataType:'json',
+            contentType:'application/json',
+            success:function (res) {
+                if(res.code == '200'){
+                    var json = JSON.parse(res.data);
+                    console.log(json);
+                    window.location.href = "/toUser?userInfo="+encodeURI(res.data);
+                }else{
+                    console.log("error code");
+                }
+            },
+            error:function (data) {
+                console.log("fail")
+            }
+        })
+    }
+</script>
+</html>
